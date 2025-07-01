@@ -171,4 +171,370 @@ const TastingInterface = () => {
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Navigation échantillons */}
-        <div
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <button 
+              onClick={prevSample}
+              disabled={currentSample === 0}
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-all"
+            >
+              <ChevronLeft size={20} />
+              <span>Précédent</span>
+            </button>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-rose-600">
+                Échantillon {currentSample + 1}/{samples.length}
+              </div>
+              <div className="text-lg font-semibold text-gray-700">
+                {currentSampleData.name}
+              </div>
+            </div>
+            
+            <button 
+              onClick={nextSample}
+              disabled={currentSample === samples.length - 1}
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-all"
+            >
+              <span>Suivant</span>
+              <ChevronRight size={20} />
+            </button>
+          </div>
+
+          {/* Infos échantillon */}
+          <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg p-4">
+            <h3 className="font-semibold text-gray-800 mb-3">Informations échantillon</h3>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="font-medium text-gray-600">Producteur:</span>
+                <div className="font-semibold">{currentSampleData.producer}</div>
+              </div>
+              <div>
+                <span className="font-medium text-gray-600">Appellation:</span>
+                <div className="font-semibold">{currentSampleData.appellation}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Grille de dégustation */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">Évaluation sensorielle</h2>
+          
+          <div className="space-y-6">
+            {/* Couleur */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Couleur (du gris au rose franc)
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                value={currentTasting.color || 5}
+                onChange={(e) => handleInputChange('color', parseInt(e.target.value))}
+                className="w-full h-3 rounded-lg appearance-none cursor-pointer"
+                style={{
+                  background: 'linear-gradient(to right, #9CA3AF 0%, #F3F4F6 20%, #FECACA 40%, #FCA5A5 60%, #F87171 80%, #DC2626 100%)'
+                }}
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>Gris</span>
+                <span>Gris rosé</span>
+                <span>Rose pâle</span>
+                <span>Rose</span>
+                <span>Rose franc</span>
+              </div>
+              <div className="text-center mt-2 text-sm font-medium text-gray-700">
+                Intensité: {currentTasting.color || 5}/10
+              </div>
+            </div>
+
+            {/* Netteté et Intensité */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Netteté aromatique</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.clarity || 3}
+                  onChange={(e) => handleInputChange('clarity', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Faible</span>
+                  <span>Moyenne</span>
+                  <span>Excellente</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Intensité aromatique</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.intensity || 3}
+                  onChange={(e) => handleInputChange('intensity', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Discrète</span>
+                  <span>Moyenne</span>
+                  <span>Puissante</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Familles aromatiques avec drag & drop */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Familles aromatiques (sélection multiple + classement par intensité)
+              </label>
+              
+              <div className="mb-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {aromaticFamilies.map(aroma => {
+                    const isSelected = (currentTasting.aromatics || []).includes(aroma);
+                    return (
+                      <button
+                        key={aroma}
+                        onClick={() => handleAromaticToggle(aroma)}
+                        className={`p-3 text-sm rounded-lg border-2 transition-all ${
+                          isSelected
+                            ? 'border-rose-500 bg-rose-100 text-rose-700' 
+                            : 'border-gray-200 hover:border-rose-300 bg-white'
+                        }`}
+                      >
+                        {aroma}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              {currentTasting.aromatics && currentTasting.aromatics.length > 0 && (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">
+                    Classement par ordre d'intensité perçue :
+                  </h4>
+                  <div className="space-y-2">
+                    {currentTasting.aromatics.map((aroma, index) => (
+                      <div key={aroma} className="flex items-center justify-between bg-white rounded-lg p-3 border">
+                        <div className="flex items-center space-x-3">
+                          <span className="bg-rose-500 text-white text-xs font-bold rounded-full w-7 h-7 flex items-center justify-center">
+                            {index + 1}
+                          </span>
+                          <span className="text-sm font-medium">{aroma}</span>
+                          <span className="text-xs text-gray-500">
+                            {index === 0 ? '(dominant)' : 
+                             index === 1 ? '(secondaire)' : 
+                             index === 2 ? '(tertiaire)' : 
+                             `(${index + 1}ème)`}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => moveAromaticUp(aroma)}
+                            disabled={index === 0}
+                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                          >
+                            ↑
+                          </button>
+                          <button
+                            onClick={() => moveAromaticDown(aroma)}
+                            disabled={index === currentTasting.aromatics.length - 1}
+                            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                          >
+                            ↓
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Équilibre en bouche */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Volume en bouche</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.volume || 3}
+                  onChange={(e) => handleInputChange('volume', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Léger</span>
+                  <span>Ample</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Équilibre</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.balance || 3}
+                  onChange={(e) => handleInputChange('balance', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Déséquilibré</span>
+                  <span>Parfait</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Longueur</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.length || 3}
+                  onChange={(e) => handleInputChange('length', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Courte</span>
+                  <span>Persistante</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Note finale et priorité */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Note globale /20</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="20"
+                  step="0.5"
+                  value={currentTasting.score || 10}
+                  onChange={(e) => handleInputChange('score', parseFloat(e.target.value))}
+                  className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>0</span>
+                  <span>10</span>
+                  <span>20</span>
+                </div>
+                <div className="text-center mt-2 text-lg font-bold text-rose-600">
+                  {currentTasting.score || 10}/20
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Priorités commerciales (sélection multiple + classement)
+                </label>
+                
+                <div className="mb-4">
+                  <div className="grid grid-cols-3 gap-2">
+                    {priorities.map(priority => {
+                      const isSelected = (currentTasting.selectedPriorities || []).includes(priority);
+                      return (
+                        <button
+                          key={priority}
+                          onClick={() => handlePriorityToggle(priority)}
+                          className={`p-2 text-xs rounded-lg border-2 transition-all ${
+                            isSelected
+                              ? 'border-rose-500 bg-rose-100 text-rose-700' 
+                              : 'border-gray-200 hover:border-rose-300 bg-white'
+                          }`}
+                        >
+                          {priority}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {currentTasting.selectedPriorities && currentTasting.selectedPriorities.length > 0 && (
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">
+                      Classement par ordre de priorité :
+                    </h4>
+                    <div className="space-y-2">
+                      {currentTasting.selectedPriorities.map((priority, index) => (
+                        <div key={priority} className="flex items-center justify-between bg-white rounded-lg p-2 border">
+                          <div className="flex items-center space-x-2">
+                            <span className="bg-rose-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                              {index + 1}
+                            </span>
+                            <span className="text-sm font-medium">{priority}</span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-1">
+                            <button
+                              onClick={() => movePriorityUp(priority)}
+                              disabled={index === 0}
+                              className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              ↑
+                            </button>
+                            <button
+                              onClick={() => movePriorityDown(priority)}
+                              disabled={index === currentTasting.selectedPriorities.length - 1}
+                              className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              ↓
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Commentaires */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Commentaires libres</label>
+              <textarea
+                value={currentTasting.comments || ''}
+                onChange={(e) => handleInputChange('comments', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+                rows="3"
+                placeholder="Observations particulières, notes de dégustation..."
+              />
+            </div>
+          </div>
+
+          {/* Bouton de sauvegarde */}
+          <div className="mt-8 flex justify-center">
+            <button className="flex items-center space-x-2 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-medium transition-all shadow-lg">
+              <Save size={20} />
+              <span>Sauvegarder cette évaluation</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Progression */}
+        <div className="mt-6 bg-white rounded-xl shadow-lg p-4">
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <span>Progression du benchmark</span>
+            <span>{currentSample + 1}/{samples.length} échantillons</span>
+          </div>
+          <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-rose-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${((currentSample + 1) / samples.length) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TastingInterface;
