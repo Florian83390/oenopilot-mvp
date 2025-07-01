@@ -10,7 +10,7 @@ export default function Home() {
         </div>
         
         <div className="space-y-4">
-          <Link href="/tasting" className="block w-full py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-center font-medium transition-all">
+          <Link href="/login" className="block w-full py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-center font-medium transition-all">
             Interface de Dégustation
           </Link>
           
