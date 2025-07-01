@@ -8,6 +8,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  min-height: 100vh;
 }
 
 a {
@@ -19,30 +21,125 @@ a {
   box-sizing: border-box;
 }
 
-/* Custom styles for range inputs */
+/* Enhanced range inputs */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 8px;
-  border-radius: 5px;
+  border-radius: 8px;
   outline: none;
+  background: linear-gradient(to right, #e5e7eb 0%, #f9a8d4 50%, #ec4899 100%);
+  transition: all 0.3s ease;
+}
+
+input[type="range"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   border-radius: 50%;
-  background: #e11d48;
+  background: linear-gradient(135deg, #ec4899, #be185d);
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.4);
 }
 
 input[type="range"]::-moz-range-thumb {
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   border-radius: 50%;
-  background: #e11d48;
+  background: linear-gradient(135deg, #ec4899, #be185d);
   cursor: pointer;
   border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #ec4899, #be185d);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.4);
+}
+
+/* Enhanced cards */
+.card-enhanced {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.card-enhanced:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #ec4899, #be185d, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced aromatic buttons */
+.aromatic-btn {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.aromatic-btn:hover {
+  transform: translateY(-1px);
+}
+
+.aromatic-btn.selected {
+  background: linear-gradient(135deg, #fce7f3, #f9a8d4);
+  border-color: #ec4899;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+}
+
+/* Enhanced progress bar */
+.progress-bar {
+  background: linear-gradient(90deg, #ec4899, #be185d);
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+  transition: width 0.5s ease;
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Glass effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
