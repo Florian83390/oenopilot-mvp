@@ -205,7 +205,7 @@ const samples = [
 <div className="card-enhanced rounded-xl p-6 animate-fade-in-up">
   <h3 className="gradient-text text-xl font-bold mb-4">Informations échantillon</h3>
   <div className="text-center">
-    <div className="text-lg font-semibold text-gray-800">{currentSampleData.description}</div>
+    <div className="text-lg font-semibold text-gray-800">{currentSampleData.name}</div>
     <div className="text-sm text-gray-600 mt-2">Session anonymisée - Benchmark 2024</div>
   </div>
 </div>
