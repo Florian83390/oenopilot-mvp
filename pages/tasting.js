@@ -201,24 +201,17 @@ const samples = [
             </button>
           </div>
 
-          {/* Infos échantillon */}
-          <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-800 mb-3">Informations échantillon</h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-600">Producteur:</span>
-                <div className="font-semibold">{currentSampleData.producer}</div>
-              </div>
-              <div>
-                <span className="font-medium text-gray-600">Appellation:</span>
-                <div className="font-semibold">{currentSampleData.appellation}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Infos échantillon */}
+<div className="card-enhanced rounded-xl p-6 animate-fade-in-up">
+  <h3 className="gradient-text text-xl font-bold mb-4">Informations échantillon</h3>
+  <div className="text-center">
+    <div className="text-lg font-semibold text-gray-800">{currentSampleData.description}</div>
+    <div className="text-sm text-gray-600 mt-2">Session anonymisée - Benchmark 2024</div>
+  </div>
+</div>
 
         {/* Grille de dégustation */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+     <div className="card-enhanced rounded-xl shadow-xl p-8 animate-fade-in-up">
           <h2 className="text-xl font-bold text-gray-800 mb-6">Évaluation sensorielle</h2>
           
           <div className="space-y-6">
