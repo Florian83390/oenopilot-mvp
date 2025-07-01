@@ -15,23 +15,23 @@ const TastingInterface = () => {
   };
 
   // 15 échantillons pour le benchmark
-  const samples = [
-    { id: 1, name: "Échantillon 1", producer: "Domaine A", appellation: "Côtes de Provence" },
-    { id: 2, name: "Échantillon 2", producer: "Domaine B", appellation: "Côtes de Provence" },
-    { id: 3, name: "Échantillon 3", producer: "Domaine C", appellation: "Côtes de Provence" },
-    { id: 4, name: "Échantillon 4", producer: "Domaine D", appellation: "Côtes de Provence Sainte-Victoire" },
-    { id: 5, name: "Échantillon 5", producer: "Domaine E", appellation: "Côtes de Provence" },
-    { id: 6, name: "Échantillon 6", producer: "Domaine F", appellation: "Côtes de Provence Fréjus" },
-    { id: 7, name: "Échantillon 7", producer: "Domaine G", appellation: "Côtes de Provence" },
-    { id: 8, name: "Échantillon 8", producer: "Domaine H", appellation: "Côtes de Provence La Londe" },
-    { id: 9, name: "Échantillon 9", producer: "Domaine I", appellation: "Côtes de Provence" },
-    { id: 10, name: "Échantillon 10", producer: "Domaine J", appellation: "Côtes de Provence Pierrefeu" },
-    { id: 11, name: "Échantillon 11", producer: "Domaine K", appellation: "Côtes de Provence" },
-    { id: 12, name: "Échantillon 12", producer: "Domaine L", appellation: "Côtes de Provence" },
-    { id: 13, name: "Échantillon 13", producer: "Domaine M", appellation: "Côtes de Provence" },
-    { id: 14, name: "Échantillon 14", producer: "Domaine N", appellation: "Côtes de Provence" },
-    { id: 15, name: "Échantillon 15", producer: "Domaine O", appellation: "Côtes de Provence" }
-  ];
+const samples = [
+  { id: 1, name: "Échantillon A", description: "Rosé de Provence 2024" },
+  { id: 2, name: "Échantillon B", description: "Rosé de Provence 2024" },
+  { id: 3, name: "Échantillon C", description: "Rosé de Provence 2024" },
+  { id: 4, name: "Échantillon D", description: "Rosé de Provence 2024" },
+  { id: 5, name: "Échantillon E", description: "Rosé de Provence 2024" },
+  { id: 6, name: "Échantillon F", description: "Rosé de Provence 2024" },
+  { id: 7, name: "Échantillon G", description: "Rosé de Provence 2024" },
+  { id: 8, name: "Échantillon H", description: "Rosé de Provence 2024" },
+  { id: 9, name: "Échantillon I", description: "Rosé de Provence 2024" },
+  { id: 10, name: "Échantillon J", description: "Rosé de Provence 2024" },
+  { id: 11, name: "Échantillon K", description: "Rosé de Provence 2024" },
+  { id: 12, name: "Échantillon L", description: "Rosé de Provence 2024" },
+  { id: 13, name: "Échantillon M", description: "Rosé de Provence 2024" },
+  { id: 14, name: "Échantillon N", description: "Rosé de Provence 2024" },
+  { id: 15, name: "Échantillon O", description: "Rosé de Provence 2024" }
+];
 
   // Familles aromatiques spécifiques au rosé
   const aromaticFamilies = [
