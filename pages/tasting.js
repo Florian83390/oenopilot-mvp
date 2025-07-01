@@ -11,7 +11,7 @@ const TastingInterface = () => {
     name: "Benchmark Côtes de Provence Rosé 2024",
     date: "8 Juillet 2025", 
     location: "Cuers",
-    taster: "Laurent Dubois"
+    taster: typeof window !== 'undefined' ? sessionStorage.getItem('participant') || 'Participant' : 'Participant'
   };
 
   // 15 échantillons pour le benchmark
