@@ -14,7 +14,7 @@ const TastingInterface = () => {
     taster: typeof window !== 'undefined' ? sessionStorage.getItem('participant') || 'Participant' : 'Participant'
   };
 
-  // 15 échantillons anonymisés
+  // 15 échantillons anonymisés A-O
   const samples = [
     { id: 1, name: "Échantillon A" },
     { id: 2, name: "Échantillon B" },
@@ -82,6 +82,45 @@ const TastingInterface = () => {
     }
   };
 
+  const exportData = () => {
+    const exportData = [];
+    
+    for (let sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
+      const data = tastingData[sampleIndex];
+      if (data) {
+        exportData.push({
+          participant: session.taster,
+          echantillon: samples[sampleIndex].name,
+          couleur: data.color || 'Non évalué',
+          nettete: data.clarity || 'Non évalué',
+          intensite: data.intensity || 'Non évalué',
+          volume: data.volume || 'Non évalué',
+          equilibre: data.balance || 'Non évalué',
+          note: data.score || 'Non évalué',
+          aromes: (data.aromatics || []).join('; '),
+          priorites: (data.selectedPriorities || []).join('; '),
+          commentaires: data.comments || ''
+        });
+      }
+    }
+    
+    const csvContent = [
+      ['Participant', 'Échantillon', 'Couleur/10', 'Netteté/5', 'Intensité/5', 'Volume/5', 'Équilibre/5', 'Note/20', 'Arômes', 'Priorités', 'Commentaires'],
+      ...exportData.map(row => [
+        row.participant, row.echantillon, row.couleur, row.nettete, row.intensite, 
+        row.volume, row.equilibre, row.note, row.aromes, row.priorites, row.commentaires
+      ])
+    ].map(row => row.join(',')).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `benchmark_${session.taster.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   const currentSampleData = samples[currentSample];
   const currentTasting = getCurrentData();
 
@@ -97,10 +136,19 @@ const TastingInterface = () => {
                 <span className="font-medium">Interface de Dégustation</span>
               </div>
             </div>
-            <div className="text-right">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <User size={16} />
-                <span>{session.taster}</span>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={exportData}
+                className="flex items-center space-x-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-all"
+              >
+                <Save size={16} />
+                <span>Export CSV</span>
+              </button>
+              <div className="text-right">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <User size={16} />
+                  <span>{session.taster}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -185,7 +233,7 @@ const TastingInterface = () => {
                 max="10"
                 value={currentTasting.color || 5}
                 onChange={(e) => handleInputChange('color', parseInt(e.target.value))}
-                className="w-full h-3 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-3 rounded-lg appearance-none cursor-pointer accent-rose-500"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-2">
                 <span>Gris</span>
@@ -193,6 +241,43 @@ const TastingInterface = () => {
               </div>
               <div className="text-center mt-2 text-sm font-medium text-gray-700">
                 Intensité: {currentTasting.color || 5}/10
+              </div>
+            </div>
+
+            {/* Netteté et Intensité */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Netteté aromatique</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.clarity || 3}
+                  onChange={(e) => handleInputChange('clarity', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Faible</span>
+                  <span>Excellente</span>
+                </div>
+                <div className="text-center mt-1 text-sm font-medium">{currentTasting.clarity || 3}/5</div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Intensité aromatique</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.intensity || 3}
+                  onChange={(e) => handleInputChange('intensity', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Discrète</span>
+                  <span>Puissante</span>
+                </div>
+                <div className="text-center mt-1 text-sm font-medium">{currentTasting.intensity || 3}/5</div>
               </div>
             </div>
 
@@ -220,6 +305,53 @@ const TastingInterface = () => {
                   );
                 })}
               </div>
+              
+              {/* Affichage des arômes sélectionnés */}
+              {currentTasting.aromatics && currentTasting.aromatics.length > 0 && (
+                <div className="mt-4 p-3 bg-rose-50 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Arômes sélectionnés :</h4>
+                  <div className="text-sm text-gray-600">
+                    {currentTasting.aromatics.join(' • ')}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Volume et Équilibre */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Volume en bouche</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.volume || 3}
+                  onChange={(e) => handleInputChange('volume', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Léger</span>
+                  <span>Ample</span>
+                </div>
+                <div className="text-center mt-1 text-sm font-medium">{currentTasting.volume || 3}/5</div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Équilibre en bouche</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={currentTasting.balance || 3}
+                  onChange={(e) => handleInputChange('balance', parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Déséquilibré</span>
+                  <span>Parfait</span>
+                </div>
+                <div className="text-center mt-1 text-sm font-medium">{currentTasting.balance || 3}/5</div>
+              </div>
             </div>
 
             {/* Note finale */}
@@ -234,6 +366,11 @@ const TastingInterface = () => {
                 onChange={(e) => handleInputChange('score', parseFloat(e.target.value))}
                 className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
               />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>0</span>
+                <span>10</span>
+                <span>20</span>
+              </div>
               <div className="text-center mt-2 text-lg font-bold text-rose-600">
                 {currentTasting.score || 10}/20
               </div>
@@ -263,6 +400,16 @@ const TastingInterface = () => {
                   );
                 })}
               </div>
+              
+              {/* Affichage des priorités sélectionnées */}
+              {currentTasting.selectedPriorities && currentTasting.selectedPriorities.length > 0 && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Priorités sélectionnées :</h4>
+                  <div className="text-sm text-gray-600">
+                    {currentTasting.selectedPriorities.join(' • ')}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Commentaires */}
