@@ -294,9 +294,9 @@ const samples = [
                       <button
                         key={aroma}
                         onClick={() => handleAromaticToggle(aroma)}
-                        className={`p-3 text-sm rounded-lg border-2 transition-all ${
+                        className={`aromatic-btn p-3 text-sm rounded-xl border-2 transition-all ${
                           isSelected
-                            ? 'border-rose-500 bg-rose-100 text-rose-700' 
+                            ? 'selected border-rose-500 bg-rose-100 text-rose-700' 
                             : 'border-gray-200 hover:border-rose-300 bg-white'
                         }`}
                       >
@@ -505,8 +505,7 @@ const samples = [
 
           {/* Bouton de sauvegarde */}
           <div className="mt-8 flex justify-center">
-            <button className="flex items-center space-x-2 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-medium transition-all shadow-lg">
-              <Save size={20} />
+<button className="btn-primary flex items-center space-x-2 px-8 py-4 text-white rounded-xl font-semibold transition-all">              <Save size={20} />
               <span>Sauvegarder cette évaluation</span>
             </button>
           </div>
